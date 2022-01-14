@@ -99,4 +99,26 @@ test('renders all firstName, lastName and email text when submitted. Does NOT re
 
 test('renders all fields text when all fields are submitted.', async () => {
     render(<ContactForm />);
+    const fNameInput = screen.getByLabelText(/first name/i);
+    const lNameInput = screen.getByLabelText(/last name/i);
+    const emailInput = screen.getByLabelText(/email/i);
+    const messageInput = screen.getByLabelText(/message/i);
+    const submitBtn = screen.getByText(/submit/i);
+    userEvent.type(fNameInput, 'Eduardo');
+    userEvent.type(lNameInput, 'Escobar');
+    userEvent.type(messageInput, 'Ketchup on eggs is wrong');
+    userEvent.type(emailInput, 'DefinitelyNotPablosKid@yahoo.com');
+    userEvent.click(submitBtn);
+
+    await waitFor(() => {
+        const fNameDisplay = screen.getByText(/eduardo/i);
+        const lNameDisplay = screen.getByText(/escobar/i);
+        const emailDisplay = screen.getByText(/definitelyNotPabloskid/i);
+        const messageDisplay = screen.getByText(/Ketchup on eggs is wrong/i);
+
+        expect(fNameDisplay).toBeInTheDocument();
+        expect(lNameDisplay).toBeInTheDocument();
+        expect(emailDisplay).toBeInTheDocument();
+        expect(messageDisplay).toBeInTheDocument();
+    })
 });
